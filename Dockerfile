@@ -1,5 +1,6 @@
-# Stage 1 - build the jar with the Maven wrapper already in the repo.
-FROM eclipse-temurin:21-jdk AS build
+# Stage 1 - build the jar. Pinned to the build host's architecture: a jar is
+# portable bytecode, so there is no reason to emulate this stage per target.
+FROM --platform=$BUILDPLATFORM eclipse-temurin:21-jdk AS build
 WORKDIR /build
 
 # Copy the wrapper and the pom first so dependencies cache between builds.

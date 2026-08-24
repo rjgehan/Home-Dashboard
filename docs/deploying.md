@@ -28,7 +28,14 @@ server, never baked in. To keep it private instead, see the note at the end.
 
 ### 3. Set up the server
 
-On the Docker host:
+**On CasaOS**, skip the shell entirely. In the CasaOS App Store choose **Custom Install**, use the
+YAML import button, and paste [`casaos/docker-compose.yml`](../casaos/docker-compose.yml). Fill the
+environment fields in the form, install, and the dashboard appears as a tile with a WebUI button.
+
+For the auto-update half, install [`casaos/watchtower-compose.yml`](../casaos/watchtower-compose.yml)
+the same way, once. Do not bundle the two - one Watchtower serves the whole host.
+
+**On a plain Docker host:**
 
 ```bash
 git clone https://github.com/<owner>/<repo>.git
@@ -61,7 +68,9 @@ That is the last manual step. From now on, pushing to `main` is the deploy.
 | --- | --- |
 | `.github/workflows/ci.yml` | Tests on pull requests and non-`main` branches |
 | `.github/workflows/deploy.yml` | On `main`: tests, then builds and pushes `latest` and a commit-sha tag |
-| `docker-compose.yml` | The dashboard plus Watchtower, on the server |
+| `docker-compose.yml` | The dashboard plus Watchtower, on a plain Docker host |
+| `casaos/docker-compose.yml` | The same app, annotated for CasaOS Custom Install |
+| `casaos/watchtower-compose.yml` | Watchtower as its own CasaOS app |
 | `.env` | The token and coordinates. Gitignored, and it must stay that way |
 
 The publish job declares `needs: test`, so a failing suite means no new image, which means Watchtower
@@ -98,6 +107,13 @@ Then `docker compose up -d`. Watchtower leaves pinned tags alone.
 
 **`homeassistant.local` will not resolve inside the container.** mDNS does not cross the container
 boundary. Use the Home Assistant host's LAN IP in `HOME_ASSISTANT_BASE_URL`.
+
+**CasaOS has no `.env` file.** The CasaOS compose files carry inline defaults you edit in the
+install form instead. Nothing secret is committed there - the token and coordinate fields ship empty.
+
+**Entity ids are baked into the image.** `config.js` is served from inside the jar, so pointing the
+dashboard at different Home Assistant entities means editing the file and pushing, which
+auto-deploys. Only the token, coordinates and timezone are runtime settings.
 
 **Watchtower needs to see the same tag move.** It compares the digest behind `:latest`. Pinning a sha
 tag disables updates for that container by design.

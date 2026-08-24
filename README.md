@@ -29,8 +29,11 @@ cp .env.example .env      # then fill in the token and coordinates
 docker compose up -d
 ```
 
-Open <http://localhost:8080/>. See [docs/deploying.md](docs/deploying.md) to point the compose file
-at your own image and get pushes to `main` deploying themselves.
+Open <http://localhost:8080/>. On CasaOS, import
+[`casaos/docker-compose.yml`](casaos/docker-compose.yml) through **Custom Install** instead.
+
+See [docs/deploying.md](docs/deploying.md) to point the compose file at your own image and get
+pushes to `main` deploying themselves.
 
 ### From source
 

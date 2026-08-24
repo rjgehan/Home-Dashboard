@@ -1,0 +1,92 @@
+# CasaOS install file for Home Dashboard.
+#
+#   CasaOS -> App Store -> Custom Install -> the "Import" / YAML button,
+#   then paste this file in and edit the environment values in the form.
+#
+# CasaOS has no .env file, so the values below are inline defaults meant to be
+# edited in the CasaOS UI rather than ${VARIABLE} references.
+
+name: home-dashboard
+
+services:
+  dashboard:
+    image: ghcr.io/rjgehan/home-dashboard:latest
+    container_name: home-dashboard
+    restart: unless-stopped
+    network_mode: bridge
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      # Use the LAN IP. homeassistant.local is mDNS and will not resolve
+      # from inside a container.
+      HOME_ASSISTANT_BASE_URL: "http://192.168.1.10:8123"
+      HOME_ASSISTANT_TOKEN: ""
+      DASHBOARD_LATITUDE: ""
+      DASHBOARD_LONGITUDE: ""
+      DASHBOARD_TIMEZONE: "auto"
+
+    labels:
+      # Watchtower only touches containers carrying this label.
+      com.centurylinklabs.watchtower.enable: "true"
+
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 3s
+      start_period: 40s
+      retries: 3
+
+    x-casaos:
+      envs:
+        - container: HOME_ASSISTANT_BASE_URL
+          description:
+            en_us: "Home Assistant address, e.g. http://192.168.1.10:8123. Must be an IP - .local names do not resolve inside containers."
+        - container: HOME_ASSISTANT_TOKEN
+          description:
+            en_us: "Long-lived access token. Home Assistant profile page, bottom of Security tab. Stays on the server and never reaches the browser."
+        - container: DASHBOARD_LATITUDE
+          description:
+            en_us: "Latitude for the forecast, e.g. 40.1234. Kept server-side so the browser never learns the location."
+        - container: DASHBOARD_LONGITUDE
+          description:
+            en_us: "Longitude for the forecast, e.g. -74.5678."
+        - container: DASHBOARD_TIMEZONE
+          description:
+            en_us: "IANA timezone such as America/New_York, or 'auto' to derive it from the coordinates."
+      ports:
+        - container: "8080"
+          description:
+            en_us: "Dashboard web UI. Point the wall tablet at this port."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  main: dashboard
+  author: rjgehan
+  developer: rjgehan
+  category: Home Automation
+  store_app_id: home-dashboard
+  index: /
+  port_map: "8080"
+  scheme: http
+  title:
+    en_us: Home Dashboard
+  tagline:
+    en_us: Wall-tablet dashboard for a Home Assistant house
+  description:
+    en_us: >-
+      Lights, fans, ceiling-fan groups, the family calendar, the forecast and the
+      kitchen on one glanceable screen. A small Spring Boot service fronts Home
+      Assistant so the access token stays on the server, and fetches the
+      Open-Meteo forecast so the house coordinates never reach the browser.
+  # Optional. Point at any reachable PNG, e.g. a raw file in this repository.
+  icon: ""
+  thumbnail: ""
+  tips:
+    before_install:
+      en_us: >-
+        You need a Home Assistant long-lived access token and your coordinates.
+        The dashboard starts without them - it just shows no data until they are set.

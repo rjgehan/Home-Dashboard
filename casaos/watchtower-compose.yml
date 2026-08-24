@@ -1,0 +1,52 @@
+# Optional second CasaOS app. Install this once and it keeps the dashboard
+# updated: every push to main publishes a new image, and Watchtower restarts
+# the container with it within five minutes.
+#
+# Install it as its own app rather than bundling it with the dashboard - one
+# Watchtower watches the whole host, and CasaOS shows one tile per compose file.
+#
+# Skip this entirely if you already run Watchtower, or if you would rather press
+# the update button in CasaOS yourself.
+
+name: watchtower
+
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    network_mode: bridge
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    # --label-enable means it only touches containers that opt in, so nothing
+    # else CasaOS manages gets restarted underneath it.
+    command: --label-enable --cleanup --interval 300
+
+    x-casaos:
+      volumes:
+        - container: /var/run/docker.sock
+          description:
+            en_us: "Docker socket. Watchtower needs it to pull images and recreate containers."
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  main: watchtower
+  author: rjgehan
+  developer: containrrr
+  category: Utilities
+  store_app_id: watchtower
+  scheme: http
+  title:
+    en_us: Watchtower
+  tagline:
+    en_us: Keeps labelled containers on their latest image
+  description:
+    en_us: >-
+      Polls the registry every five minutes and recreates any container labelled
+      com.centurylinklabs.watchtower.enable=true when a newer image is published.
+      This is what turns a push to main into a deploy.
+  icon: ""
