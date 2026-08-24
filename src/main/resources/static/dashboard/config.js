@@ -32,7 +32,7 @@ window.HA_CONFIG = {
     mainBedroomAccentLight: "light.main_bedroom_fan",
 
     weather: "weather.forecast_home",
-    calendar: "calendar.family",
+    calendar: "calendar.the_squad",
 
     topOven: "water_heater.oven",
     cookTimeRemaining: "sensor.oven_cook_time_remaining",
@@ -40,7 +40,7 @@ window.HA_CONFIG = {
     bottomOven: "sensor.lower_oven_cook_mode",
 
     fuelLevel: "sensor.vehicle_fuel_level",
-    sleepScore: "sensor.sleep_score",
+    sleepScore: "sensor.cpap_total_myair_score",
     dishwasherClean: "binary_sensor.dishwasher_is_clean",
     carBattery: "sensor.vehicle_battery_level",
     engine: "binary_sensor.vehicle_engine",
