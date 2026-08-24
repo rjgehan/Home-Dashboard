@@ -1,0 +1,19 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Local environment
+.env
+*.local.yml
+application-local.yml
+src/main/resources/application-local.yml
+
+# IDE / OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local AI/session notes, not part of the project.
+PROJECT_CONTEXT.md

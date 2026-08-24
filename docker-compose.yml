@@ -1,0 +1,32 @@
+# Runs on the Docker host, not in CI.
+#
+#   1. cp .env.example .env   and fill it in
+#   2. docker compose up -d
+#
+# From then on, every push to main rebuilds the image in GitHub Actions and
+# Watchtower pulls it here within five minutes. There is nothing to run by hand.
+
+services:
+  dashboard:
+    image: ghcr.io/rjgehan/home-dashboard:latest
+    container_name: home-dashboard
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      HOME_ASSISTANT_BASE_URL: ${HOME_ASSISTANT_BASE_URL}
+      HOME_ASSISTANT_TOKEN: ${HOME_ASSISTANT_TOKEN}
+      DASHBOARD_LATITUDE: ${DASHBOARD_LATITUDE}
+      DASHBOARD_LONGITUDE: ${DASHBOARD_LONGITUDE}
+      DASHBOARD_TIMEZONE: ${DASHBOARD_TIMEZONE:-auto}
+    labels:
+      # Watchtower only touches containers carrying this label.
+      com.centurylinklabs.watchtower.enable: "true"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --label-enable --cleanup --interval 300

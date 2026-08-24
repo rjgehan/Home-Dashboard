@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Dashboard Prototype</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="dashboard" aria-label="Home dashboard prototype">
+      <section class="home-side" aria-label="Home controls">
+        <header class="overview">
+          <button id="themeButton" class="theme-button" type="button" aria-label="Change dashboard theme">●</button>
+          <div class="date-time">
+            <p class="eyebrow">Today</p>
+            <div id="dateLabel" class="date-label">--</div>
+            <h1 id="currentTime">--:--</h1>
+            <span id="greetingLine" class="greeting-line">Home is ready</span>
+            <div id="overviewMeta" class="overview-meta" aria-live="polite"></div>
+          </div>
+
+          <button id="weatherButton" class="weather-card" type="button" aria-label="Open weather details">
+            <div id="weatherIcon" class="weather-icon">☀</div>
+            <div class="weather-copy">
+              <strong id="temperature">--°</strong>
+              <span id="weatherSummary">Clear</span>
+              <small id="weatherSubline">High --° · Low --°</small>
+              <div class="weather-inline">
+                <span id="weatherMiniFeels">Feels --°</span>
+                <span id="weatherMiniUv">UV --</span>
+              </div>
+            </div>
+          </button>
+        </header>
+
+        <section id="controlGrid" class="control-grid" aria-label="Primary controls"></section>
+      </section>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <section class="schedule-side" aria-label="Calendar">
+        <section class="schedule-panel calendar-panel" aria-labelledby="calendarTitle">
+          <div class="section-heading">
+            <p class="eyebrow">Shared schedule</p>
+            <h2 id="calendarTitle">Calendar</h2>
+          </div>
+          <div id="monthCalendar" class="month-calendar" aria-label="Month calendar"></div>
+        </section>
+
+        <section class="schedule-panel upcoming-panel" aria-labelledby="upcomingTitle">
+          <div class="section-heading">
+            <p class="eyebrow">Family</p>
+            <h2 id="upcomingTitle">Coming Up</h2>
+          </div>
+          <div id="upcomingEvents" class="event-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="themeDialog" class="control-dialog theme-dialog">
+      <form method="dialog" class="dialog-header">
+        <div>
+          <p class="eyebrow">Display</p>
+          <h2>Theme Color</h2>
+        </div>
+        <button type="submit" class="ghost-button">Close</button>
+      </form>
+
+      <section class="theme-grid" aria-label="Theme choices">
+        <button type="button" data-theme="blue">
+          <span class="theme-swatch blue-swatch"></span>
+          <strong>Morning Blue</strong>
+          <small>Soft white and blue</small>
+        </button>
+        <button type="button" data-theme="night">
+          <span class="theme-swatch night-swatch"></span>
+          <strong>Night Slate</strong>
+          <small>Dark and quiet</small>
+        </button>
+        <button type="button" data-theme="midnight">
+          <span class="theme-swatch midnight-swatch"></span>
+          <strong>Midnight</strong>
+          <small>Deep tablet mode</small>
+        </button>
+        <button type="button" data-theme="holiday">
+          <span class="theme-swatch holiday-swatch"></span>
+          <strong>Christmas</strong>
+          <small>Evergreen, lights, and trees</small>
+        </button>
+        <button type="button" data-theme="winter">
+          <span class="theme-swatch winter-swatch"></span>
+          <strong>Winter Snow</strong>
+          <small>Frosted blue with snow</small>
+        </button>
+        <button type="button" data-theme="easter">
+          <span class="theme-swatch easter-swatch"></span>
+          <strong>Easter</strong>
+          <small>Pastels, eggs, and spring</small>
+        </button>
+        <button type="button" data-theme="july">
+          <span class="theme-swatch july-swatch"></span>
+          <strong>Fourth of July</strong>
+          <small>Stars, blue, and fireworks</small>
+        </button>
+        <button type="button" data-theme="halloween">
+          <span class="theme-swatch halloween-swatch"></span>
+          <strong>Halloween</strong>
+          <small>Plum, lanterns, and glow</small>
+        </button>
+      </section>
+    </dialog>
+
+    <dialog id="weatherDialog" class="control-dialog weather-dialog">
+      <form method="dialog" class="dialog-header">
+        <div>
+          <p class="eyebrow">Weather</p>
+          <h2>Outside</h2>
+        </div>
+        <button type="submit" class="ghost-button">Close</button>
+      </form>
+
+      <section class="weather-current" aria-label="Current weather details">
+        <div class="weather-current-main">
+          <span id="weatherDialogIcon">☀</span>
+          <strong id="weatherDialogTemp">--°</strong>
+          <small id="weatherDialogSummary">Loading</small>
+        </div>
+        <dl class="weather-metrics">
+          <div>
+            <dt>Feels Like</dt>
+            <dd id="feelsLike">--°</dd>
+          </div>
+          <div>
+            <dt>Wind</dt>
+            <dd id="windSpeed">--</dd>
+          </div>
+          <div>
+            <dt>Rain</dt>
+            <dd id="rainChance">--</dd>
+          </div>
+          <div>
+            <dt>UV Index</dt>
+            <dd id="uvIndex">--</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="weekly-weather" aria-label="Weekly forecast">
+        <div class="section-heading weather-section-heading">
+          <p class="eyebrow">Forecast</p>
+          <h2>This Week</h2>
+        </div>
+        <div id="weeklyForecast" class="weekly-forecast"></div>
+      </section>
+    </dialog>
+
+    <dialog id="lightsDialog" class="control-dialog">
+      <form method="dialog" class="dialog-header">
+        <div>
+          <p class="eyebrow">Exterior</p>
+          <h2>Outdoor Lights</h2>
+        </div>
+        <button type="submit" class="ghost-button">Close</button>
+      </form>
+
+      <section class="dialog-actions" aria-label="Outdoor light scenes" data-light-scenes>
+        <button type="button" data-light-scene="on">All On</button>
+        <button type="button" data-light-scene="off">All Off</button>
+      </section>
+
+      <section class="dialog-list" aria-label="Outdoor light controls">
+        <article class="dialog-row" data-light-row="gazeboLights">
+          <div>
+            <strong>Gazebo Lights</strong>
+            <span data-light-status="gazeboLights">Back patio</span>
+          </div>
+          <div class="dialog-row-actions">
+            <button type="button" data-light-entity-action="gazeboLights" data-light-action="on">On</button>
+            <button type="button" data-light-entity-action="gazeboLights" data-light-action="off">Off</button>
+          </div>
+        </article>
+        <article class="dialog-row" data-light-row="tableLights">
+          <div>
+            <strong>Table Lights</strong>
+            <span data-light-status="tableLights">Outdoor table</span>
+          </div>
+          <div class="dialog-row-actions">
+            <button type="button" data-light-entity-action="tableLights" data-light-action="on">On</button>
+            <button type="button" data-light-entity-action="tableLights" data-light-action="off">Off</button>
+          </div>
+        </article>
+        <article class="dialog-row" data-light-row="couchLights">
+          <div>
+            <strong>Couch Lights</strong>
+            <span data-light-status="couchLights">Outdoor seating</span>
+          </div>
+          <div class="dialog-row-actions">
+            <button type="button" data-light-entity-action="couchLights" data-light-action="on">On</button>
+            <button type="button" data-light-entity-action="couchLights" data-light-action="off">Off</button>
+          </div>
+        </article>
+      </section>
+    </dialog>
+
+    <dialog id="fansDialog" class="control-dialog">
+      <form method="dialog" class="dialog-header">
+        <div>
+          <p class="eyebrow">Airflow</p>
+          <h2>Ceiling Fans</h2>
+        </div>
+        <button type="submit" class="ghost-button">Close</button>
+      </form>
+
+      <section class="fan-panel" aria-label="Family room fan controls">
+        <div class="fan-heading">
+          <strong>Family Room</strong>
+          <span>Fan and two lights</span>
+        </div>
+        <label class="slider-control fan-speed-control">
+          <span>
+            <strong>Fan Speed</strong>
+            <output data-slider-output="familyRoomFan">0%</output>
+          </span>
+          <input type="range" min="10" max="100" step="10" value="50" data-fan-slider="familyRoomFan" />
+        </label>
+        <button class="fan-off-button" type="button" data-fan-off="familyRoomFan">Turn Fan Off</button>
+        <div class="lights-heading">
+          <span>Lights</span>
+        </div>
+        <div class="light-sliders">
+          <label class="slider-control light-control">
+            <span>
+              <strong>Main Light</strong>
+              <output data-slider-output="familyRoomMainLight">0%</output>
+            </span>
+            <input type="range" min="0" max="100" step="1" value="0" data-light-slider="familyRoomMainLight" />
+          </label>
+          <label class="slider-control light-control">
+            <span>
+              <strong>Accent Light</strong>
+              <output data-slider-output="familyRoomAccentLight">0%</output>
+            </span>
+            <input type="range" min="0" max="100" step="1" value="0" data-light-slider="familyRoomAccentLight" />
+          </label>
+        </div>
+      </section>
+
+      <section class="fan-panel" aria-label="Master bedroom fan controls">
+        <div class="fan-heading">
+          <strong>Master Bedroom</strong>
+          <span>Fan and two lights</span>
+        </div>
+        <label class="slider-control fan-speed-control">
+          <span>
+            <strong>Fan Speed</strong>
+            <output data-slider-output="mainBedroomFan">0%</output>
+          </span>
+          <input type="range" min="10" max="100" step="10" value="50" data-fan-slider="mainBedroomFan" />
+        </label>
+        <button class="fan-off-button" type="button" data-fan-off="mainBedroomFan">Turn Fan Off</button>
+        <div class="lights-heading">
+          <span>Lights</span>
+        </div>
+        <div class="light-sliders">
+          <label class="slider-control light-control">
+            <span>
+              <strong>Main Light</strong>
+              <output data-slider-output="mainBedroomMainLight">0%</output>
+            </span>
+            <input type="range" min="0" max="100" step="1" value="0" data-light-slider="mainBedroomMainLight" />
+          </label>
+          <label class="slider-control light-control">
+            <span>
+              <strong>Accent Light</strong>
+              <output data-slider-output="mainBedroomAccentLight">0%</output>
+            </span>
+            <input type="range" min="0" max="100" step="1" value="0" data-light-slider="mainBedroomAccentLight" />
+          </label>
+        </div>
+      </section>
+    </dialog>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

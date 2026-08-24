@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: home-dashboard
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          # The wall tablet should pick up edited CSS/JS without a hard refresh.
+          max-age: 0
+          must-revalidate: true
+
+server:
+  port: 8080
+  # Bind to every interface so the tablet on the LAN can reach the dashboard.
+  address: 0.0.0.0
+
+dashboard:
+  weather:
+    # The house location lives here, not in the browser config, so it never reaches the repo.
+    latitude: ${DASHBOARD_LATITUDE:}
+    longitude: ${DASHBOARD_LONGITUDE:}
+    timezone: ${DASHBOARD_TIMEZONE:auto}
+    forecast-days: 7
+
+home-assistant:
+  # Secrets stay here, never in the browser-side config.js.
+  base-url: ${HOME_ASSISTANT_BASE_URL:}
+  token: ${HOME_ASSISTANT_TOKEN:}
+  connect-timeout: 3s
+  read-timeout: 8s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.homedashboard: INFO

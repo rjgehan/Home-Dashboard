@@ -1,0 +1,13 @@
+target/
+.git/
+.github/
+.idea/
+.vscode/
+*.iml
+.env
+*.local.yml
+application-local.yml
+README.md
+PROJECT_CONTEXT.md
+Thumbs.db
+.DS_Store

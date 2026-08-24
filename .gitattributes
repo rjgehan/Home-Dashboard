@@ -1,0 +1,11 @@
+# Normalize line endings on commit, keep working copies native.
+* text=auto
+
+# The Maven wrapper script must stay LF or it will not run on macOS or Linux.
+mvnw text eol=lf
+
+# Windows scripts must stay CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+*.jar binary
